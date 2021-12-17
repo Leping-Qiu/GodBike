@@ -15,11 +15,13 @@ public struct Gesture
 public class GestureDetector : MonoBehaviour
 {
     [Header("Gesture Parameters")]
-    public float detectionThreshold = 0.1f;
+    public float detectionThreshold = 0.05f;
     public bool addGestureMode = true;
+
     [Header("Gesture Objects")]
     public OVRSkeleton skeleton;
     public List<Gesture> gestures;
+
     private List<OVRBone> fingerBones;
     private Gesture previousGesture;
 
