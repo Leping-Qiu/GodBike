@@ -22,7 +22,6 @@ public class ControllerDetectorMultiple: MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        OVRInput.Update();
         // Right Hand Thunmb Stick in Horizontal Direction
         float thumbStickX = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick).x;
 
