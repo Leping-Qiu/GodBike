@@ -15,6 +15,8 @@ public class BikeController : MonoBehaviour
     [Header("Bike Controls")]
     public float movementSpeed = 6f;
     public RideModes rideMode = RideModes.AutoPilotBreaks;
+    public GameObject wheelForward;
+    public GameObject wheelBackward;
 
     [Header("Spawn Controls")]
     public SpawnManager spawnManager;
@@ -23,15 +25,18 @@ public class BikeController : MonoBehaviour
     private int triggerCounter = 1;
     private float movement = 1;
 
+    private HMD HMD;
+
     void Start()
     {
-        
+        HMD = GameObject.FindGameObjectWithTag("HMD").GetComponent<HMD>();
     }
 
     void Update()
     {
         OVRInput.Update();
 
+        // Move Player
         if (rideMode == RideModes.AutoPilotBreaks)
         {
             float indexTrigger = OVRInput.Get(OVRInput.RawAxis1D.LIndexTrigger);
@@ -53,7 +58,8 @@ public class BikeController : MonoBehaviour
             movement = Input.GetAxis("Vertical") * movementSpeed;
         }
 
-        transform.Translate(new Vector3(0, 0, movement) * Time.deltaTime);
+        float movementInTime = movement * Time.deltaTime;
+        transform.Translate(new Vector3(0, 0, movementInTime));
 
         // Trigger Spawning
         if (transform.position.z > triggerCounter * blockSize)
@@ -61,5 +67,12 @@ public class BikeController : MonoBehaviour
             spawnManager.SpawnTriggerEntered();
             triggerCounter++;
         }
+
+        // Display Speed
+        HMD.ChangeSpeedometer(movement * 3.6f);
+
+        // Rotate Wheel
+        wheelForward.transform.Rotate(movementInTime * 100, 0, 0);
+        wheelBackward.transform.Rotate(movementInTime * 100, 0, 0);
     }
 }

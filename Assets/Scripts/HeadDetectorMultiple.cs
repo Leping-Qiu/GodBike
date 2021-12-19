@@ -27,7 +27,6 @@ public class HeadDetectorMultiple : MonoBehaviour
     {
         Quaternion headsetRotation = cameraRig.centerEyeAnchor.rotation;
         float turnAngle = headsetRotation.eulerAngles.z;
-        Debug.Log(turnAngle);
 
         // Reset position
         if (turnAngle >= 0 && turnAngle <= 10 || turnAngle <= 360 && turnAngle >= 350)

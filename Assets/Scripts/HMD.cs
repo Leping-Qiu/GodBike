@@ -11,14 +11,21 @@ public class HMD : MonoBehaviour
     public float arrowMoveRange = 0.4f;
     public float arrowMoveSpeed = 0.002f;
 
-    [Header("HMD Objects")]
+    [Header("HMD Widgets")]
     public List<GameObject> widgets;
-    public TMP_Text debugText;
+
+    [Header("HMD Dashboard")]
+    public TMP_Text textTime;
+    public TMP_Text textSpeed;
+    public TMP_Text textHeading;
+    public TMP_Text textActivity;
+    public TMP_Text textHeartRate;
+
+    [Header("HMD Arrow")]
     public GameObject arrow;
     public GameObject arrowComponent1;
     public GameObject arrowComponent2;
 
-    private String debugContent;
     private int prevHMDPage;
 
     private int minPageIndex;
@@ -26,6 +33,10 @@ public class HMD : MonoBehaviour
 
     private float arrowMovePos = 0;
     private bool arrowMoveForward = true;
+
+    private float activity = 0;
+    private float heartRate = 79;
+    private float heartRateTimer = 15;
 
     // Start is called before the first frame update
     void Start()
@@ -42,12 +53,12 @@ public class HMD : MonoBehaviour
         widgets[minPageIndex].SetActive(true);
         arrowComponent1.GetComponent<MeshRenderer>().material.color = new Color(0.008f, 0.348f, 0.813f, 0.5f);
         arrowComponent2.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0f);
-
     }
 
     // Update is called once per frame
     void Update() 
     {
+        // Move Arrow
         if (arrowMoveForward)
         {
             arrow.transform.Translate(new Vector3(0, arrowMoveSpeed, 0));
@@ -60,12 +71,29 @@ public class HMD : MonoBehaviour
             arrowMovePos -= arrowMoveSpeed * 1.5f;
             if (arrowMovePos < 0) arrowMoveForward = true;
         }
-        Debug.Log(arrowMovePos);
+
+        // Update DashBoard
+        textTime.SetText(DateTime.UtcNow.AddHours(8).ToString("HH:mm"));
+        textHeading.SetText("355");
+        textActivity.SetText((activity += 0.1f * Time.deltaTime).ToString("0.0"));
+
+        // Random Heart Rate
+        heartRateTimer += Time.deltaTime;
+        if (heartRateTimer > 15 && heartRate < 130)
+        {
+            heartRate += 1;
+            heartRateTimer = 0;
+            textHeartRate.SetText(heartRate.ToString("0"));
+        }
+    }
+
+    public void ChangeSpeedometer(float speed)
+    {
+        textSpeed.SetText(speed.ToString("0.0"));
     }
 
     private void ChangeWidget(int newPageNumber)
     {
-        Debug.Log("new " + newPageNumber);
         widgets[prevHMDPage].SetActive(false);
         widgets[newPageNumber].SetActive(true);
         prevHMDPage = newPageNumber;
