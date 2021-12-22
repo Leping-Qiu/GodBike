@@ -74,7 +74,7 @@ public class HMD : MonoBehaviour
 
         // Update DashBoard
         textTime.SetText(DateTime.UtcNow.AddHours(8).ToString("HH:mm"));
-        textHeading.SetText("355");
+        textHeading.SetText("175");
         textActivity.SetText((activity += 0.1f * Time.deltaTime).ToString("0.0"));
 
         // Random Heart Rate
